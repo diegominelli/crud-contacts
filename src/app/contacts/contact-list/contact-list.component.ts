@@ -1,6 +1,6 @@
-import { ContactsService } from './contact.service';
 import { Component, OnInit } from '@angular/core';
 import { ContactModel } from './contact.model';
+import { ContactService } from './contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -13,11 +13,25 @@ export class ContactListComponent implements OnInit {
   _contacts: ContactModel[] = [];
   filteredContacts: ContactModel[] = [];
 
-  constructor(private contactsService: ContactsService) {}
+  constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
-    this._contacts = this.contactsService.returnAll();
-    this.filteredContacts = this._contacts;
+    this.returnAll();
+  }
+
+  returnAll(): void {
+    this.contactService.returnAll().subscribe({
+      next: (contacts) => {
+        this._contacts = contacts;
+        this.filteredContacts = this._contacts;
+      },
+      error: (e) => {
+        console.log('Error in returnAll', e);
+      },
+      complete() {
+        console.log('Done');
+      },
+    });
   }
 
   set filter(value: string) {
