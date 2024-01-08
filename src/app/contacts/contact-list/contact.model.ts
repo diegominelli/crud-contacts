@@ -1,4 +1,4 @@
-export class ContactsModel {
+export class ContactModel {
   id: number;
   image: string;
   name: string;
